@@ -5,11 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Cooldown Tools</title>
 <style>
-  /* Background gradient with subtle pattern */
   body {
     margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #2b2b2b 0%, #1e1e1e 100%);
+    font-family: Arial, sans-serif;
+    background-color: #1e1e1e;
     color: #eee;
     display: flex;
     flex-direction: column;
@@ -18,70 +17,155 @@
   }
   header {
     width: 100%;
-    background-color: #121212;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background-color: #2c2c2c;
     padding: 15px 0;
-    position: relative;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.7);
   }
   header h1 {
-    font-size: 2.8rem;
-    letter-spacing: 2px;
-    margin: 0 80px; /* space for logos */
+    margin: 0;
+    font-size: 2.5rem;
   }
-  /* SCP logos on sides */
-  .logo {
-    position: absolute;
-    top: 8px;
-    width: 60px;
-    height: 60px;
-    filter: invert(100%) brightness(200%);
-  }
-  .logo.left1 { left: 10px; }
-  .logo.left2 { left: 75px; }
-  .logo.right1 { right: 75px; }
-  .logo.right2 { right: 10px; }
-  
   main {
     margin-top: 60px;
-    background: #292929;
-    padding: 30px 40px;
-    border-radius: 15px;
-    box-shadow: 0 0 20px #000;
     width: 320px;
     text-align: center;
   }
   .buttons {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
+    gap: 12px;
   }
   button.spc-btn {
     flex: 1;
-    background-color: #444;
-    border: none;
+    background-color: #333;
+    border: 2px solid #444;
     color: #ddd;
     font-size: 1rem;
-    padding: 10px 5px;
-    margin: 0 6px;
-    border-radius: 8px;
+    padding: 12px 0;
+    border-radius: 12px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+    transition: all 0.3s ease;
+    font-weight: 600;
     user-select: none;
   }
-  button.spc-btn:hover, button.spc-btn.active {
+  button.spc-btn:hover {
     background-color: #ffcc00;
     color: #121212;
+    border-color: #ffcc00;
+    box-shadow: 0 6px 12px rgba(255,204,0,0.6);
+    transform: translateY(-3px);
+  }
+  button.spc-btn.active {
+    background-color: #ffcc00;
+    color: #121212;
+    border-color: #ffcc00;
+    box-shadow: 0 6px 12px rgba(255,204,0,0.8);
+    transform: translateY(-3px);
   }
   input[type=number] {
     width: 100%;
     padding: 12px;
     font-size: 1.1rem;
-    border-radius: 8px;
+    border-radius: 5px;
     border: none;
     background-color: #333;
     color: white;
     margin-bottom: 20px;
-    box-sizing: bo
+    box-sizing: border-box;
+  }
+  button.calculate-btn {
+    width: 100%;
+    background-color: #555;
+    color: #eee;
+    border: none;
+    padding: 14px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  button.calculate-btn:hover {
+    background-color: #ffcc00;
+    color: #121212;
+  }
+  .result {
+    margin-top: 30px;
+    font-size: 1.4rem;
+    color: #ffcc00;
+    min-height: 40px;
+    user-select: text;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Cooldown Tools</h1>
+</header>
+
+<main>
+  <div class="buttons">
+    <button class="spc-btn active" id="btn-610" onclick="selectSCP('610')">SCP 610</button>
+    <button class="spc-btn" id="btn-0762" onclick="selectSCP('0762')">SCP 076-2</button>
+    <button class="spc-btn" id="btn-riot" onclick="selectSCP('riot')">Class-D Riot</button>
+  </div>
+
+  <input
+    type="number"
+    id="percentage"
+    placeholder="Enter % shown on screen"
+    min="0"
+    max="100"
+  />
+  <button class="calculate-btn" onclick="calculateCooldown()">Calculate</button>
+
+  <div class="result" id="result"></div>
+</main>
+
+<script>
+  let selectedSCP = '610'; // default selected
+
+  function selectSCP(scp) {
+    selectedSCP = scp;
+    document.querySelectorAll('.spc-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById(`btn-${scp}`).classList.add('active');
+    document.getElementById('percentage').value = '';
+    document.getElementById('result').textContent = '';
+  }
+
+  function calculateCooldown() {
+    const percentInput = document.getElementById('percentage').value;
+    const resultDiv = document.getElementById('result');
+
+    if (percentInput === '' || isNaN(percentInput) || percentInput < 0 || percentInput > 100) {
+      resultDiv.textContent = 'Please enter a valid percentage between 0 and 100.';
+      return;
+    }
+
+    const percent = parseFloat(percentInput);
+    let multiplier, message;
+
+    if (selectedSCP === '610') {
+      multiplier = 2.4;
+      message = 'SCP 610 CAN BE BREACHED IN:';
+    } else if (selectedSCP === '0762') {
+      multiplier = 1.2;
+      message = 'SCP 076-2 CAN BECOME ACTIVE IN:';
+    } else {
+      multiplier = 0.3;
+      message = 'A RIOT CAN BE CAUSED IN:';
+    }
+
+    const timeInHours = ((100 - percent) * multiplier) / 100;
+    const hours = Math.floor(timeInHours);
+    const minutes = Math.round((timeInHours - hours) * 60);
+
+    resultDiv.textContent = `${message} ${hours}h ${minutes}m`;
+  }
+</script>
+
+</body>
+</html>
