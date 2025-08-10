@@ -1,122 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Cooldown Tools</title>
-  <style>
-    body {
-      background-color: #1e1e1e;
-      color: white;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      background-color: #2c2c2c;
-      padding: 20px;
-    }
-    h1 {
-      margin: 0;
-      font-size: 2.5em;
-    }
-    main {
-      margin-top: 40px;
-    }
-    select,
-    input,
-    button {
-      padding: 12px;
-      margin: 10px;
-      font-size: 1.1em;
-      border-radius: 5px;
-      border: none;
-    }
-    select,
-    input {
-      background-color: #333;
-      color: white;
-    }
-    button {
-      background-color: #444;
-      color: white;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    button:hover {
-      background-color: #666;
-    }
-    .result {
-      margin-top: 30px;
-      font-size: 1.5em;
-      color: #ffcc00;
-      opacity: 0;
-      transition: opacity 0.5s ease-in-out;
-    }
-    .result.show {
-      opacity: 1;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>Cooldown Tools</h1>
-  </header>
-  <main>
-    <select id="scpSelect">
-      <option value="610">SCP 610</option>
-      <option value="0762">SCP 076-2</option>
-      <option value="riot">Class-D Riot</option>
-    </select>
-    <input
-      type="number"
-      id="percentage"
-      placeholder="Enter % shown on screen"
-      min="0"
-      max="100"
-    />
-    <button onclick="calculateCooldown()">Calculate</button>
-    <div class="result" id="result"></div>
-  </main>
-  <script>
-    function calculateCooldown() {
-      const scp = document.getElementById("scpSelect").value;
-      const percentInput = document.getElementById("percentage").value;
-      const resultDiv = document.getElementById("result");
-
-      if (
-        percentInput === "" ||
-        isNaN(percentInput) ||
-        percentInput < 0 ||
-        percentInput > 100
-      ) {
-        resultDiv.textContent = "Please enter a valid percentage between 0 and 100.";
-        resultDiv.classList.add("show");
-        return;
-      }
-
-      const percent = parseFloat(percentInput);
-      let multiplier, message;
-
-      if (scp === "610") {
-        multiplier = 2.4;
-        message = "SCP 610 CAN BE BREACHED IN:";
-      } else if (scp === "0762") {
-        multiplier = 1.2;
-        message = "SCP 076-2 CAN BECOME ACTIVE IN:";
-      } else {
-        multiplier = 0.3;
-        message = "A RIOT CAN BE CAUSED IN:";
-      }
-
-      const timeInHours = ((100 - percent) * multiplier) / 100;
-      const hours = Math.floor(timeInHours);
-      const minutes = Math.round((timeInHours - hours) * 60);
-
-      resultDiv.textContent = `${message} ${hours}h ${minutes}m`;
-      resultDiv.classList.add("show");
-    }
-  </script>
-</body>
-</html>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cooldown Tools</title>
+<style>
+  /* Background gradient with subtle pattern */
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #2b2b2b 0%, #1e1e1e 100%);
+    color: #eee;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+  }
+  header {
+    width: 100%;
+    background-color: #121212;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 0;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+  }
+  header h1 {
+    font-size: 2.8rem;
+    letter-spacing: 2px;
+    margin: 0 80px; /* space for logos */
+  }
+  /* SCP logos on sides */
+  .logo {
+    position: absolute;
+    top: 8px;
+    width: 60px;
+    height: 60px;
+    filter: invert(100%) brightness(200%);
+  }
+  .logo.left1 { left: 10px; }
+  .logo.left2 { left: 75px; }
+  .logo.right1 { right: 75px; }
+  .logo.right2 { right: 10px; }
+  
+  main {
+    margin-top: 60px;
+    background: #292929;
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px #000;
+    width: 320px;
+    text-align: center;
+  }
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+  }
+  button.spc-btn {
+    flex: 1;
+    background-color: #444;
+    border: none;
+    color: #ddd;
+    font-size: 1rem;
+    padding: 10px 5px;
+    margin: 0 6px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    user-select: none;
+  }
+  button.spc-btn:hover, button.spc-btn.active {
+    background-color: #ffcc00;
+    color: #121212;
+  }
+  input[type=number] {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    border: none;
+    background-color: #333;
+    color: white;
+    margin-bottom: 20px;
+    box-sizing: bo
