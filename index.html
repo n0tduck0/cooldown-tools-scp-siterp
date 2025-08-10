@@ -79,7 +79,7 @@
     margin-bottom: 20px;
     box-sizing: border-box;
   }
-  button.calculate-btn {
+  button.calculate-btn, button.go-back-btn {
     width: 100%;
     background-color: #555;
     color: #eee;
@@ -89,8 +89,9 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
+    margin-top: 10px;
   }
-  button.calculate-btn:hover {
+  button.calculate-btn:hover, button.go-back-btn:hover {
     background-color: #ffcc00;
     color: #121212;
   }
@@ -128,6 +129,7 @@
   </div>
 
   <div class="result" id="result"></div>
+  <button class="go-back-btn" id="goBackBtn" style="display:none;" onclick="goBack()">Go Back</button>
 </main>
 
 <script>
@@ -141,6 +143,7 @@
     document.getElementById('percentage').value = '';
     document.getElementById('result').textContent = '';
     document.querySelector('.buttons').style.display = 'flex';
+    document.getElementById('goBackBtn').style.display = 'none';
   }
 
   function calculateCooldown() {
@@ -178,11 +181,23 @@
     const hours = Math.floor(totalMinutes / 60);
     const minutes = Math.round(totalMinutes % 60);
 
-    // Clear screen except result
+    // Hide input and buttons, show result and go back button
     document.getElementById('input-section').style.display = 'none';
     document.querySelector('.buttons').style.display = 'none';
 
     resultDiv.textContent = `${message} ${hours}h ${minutes}m`;
+    document.getElementById('goBackBtn').style.display = 'block';
+  }
+
+  function goBack() {
+    // Reset UI to initial state
+    selectedSCP = null;
+    document.querySelectorAll('.spc-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById('input-section').style.display = 'none';
+    document.querySelector('.buttons').style.display = 'flex';
+    document.getElementById('result').textContent = '';
+    document.getElementById('goBackBtn').style.display = 'none';
+    document.getElementById('percentage').value = '';
   }
 </script>
 
