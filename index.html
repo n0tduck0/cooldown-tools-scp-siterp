@@ -65,6 +65,9 @@
     box-shadow: 0 6px 12px rgba(255,204,0,0.8);
     transform: translateY(-3px);
   }
+  #input-section {
+    margin-top: 20px;
+  }
   input[type=number] {
     width: 100%;
     padding: 12px;
@@ -108,37 +111,49 @@
 
 <main>
   <div class="buttons">
-    <button class="spc-btn active" id="btn-610" onclick="selectSCP('610')">SCP 610</button>
+    <button class="spc-btn" id="btn-610" onclick="selectSCP('610')">SCP 610</button>
     <button class="spc-btn" id="btn-0762" onclick="selectSCP('0762')">SCP 076-2</button>
     <button class="spc-btn" id="btn-riot" onclick="selectSCP('riot')">Class-D Riot</button>
   </div>
 
-  <input
-    type="number"
-    id="percentage"
-    placeholder="Enter % shown on screen"
-    min="0"
-    max="100"
-  />
-  <button class="calculate-btn" onclick="calculateCooldown()">Calculate</button>
+  <div id="input-section" style="display:none;">
+    <input
+      type="number"
+      id="percentage"
+      placeholder="Enter % shown on screen"
+      min="0"
+      max="100"
+    />
+    <button class="calculate-btn" onclick="calculateCooldown()">Calculate</button>
+  </div>
 
   <div class="result" id="result"></div>
 </main>
 
 <script>
-  let selectedSCP = '610'; // default selected
+  let selectedSCP = null;
 
   function selectSCP(scp) {
     selectedSCP = scp;
+
+    // Highlight the selected button, remove from others
     document.querySelectorAll('.spc-btn').forEach(btn => btn.classList.remove('active'));
     document.getElementById(`btn-${scp}`).classList.add('active');
+
+    // Show input and clear fields
+    document.getElementById('input-section').style.display = 'block';
     document.getElementById('percentage').value = '';
     document.getElementById('result').textContent = '';
   }
 
   function calculateCooldown() {
-    const percentInput = document.getElementById('percentage').value;
+    const percentInput = document.getElementById('percentage').value.trim();
     const resultDiv = document.getElementById('result');
+
+    if (!selectedSCP) {
+      resultDiv.textContent = 'Please select an option first.';
+      return;
+    }
 
     if (percentInput === '' || isNaN(percentInput) || percentInput < 0 || percentInput > 100) {
       resultDiv.textContent = 'Please enter a valid percentage between 0 and 100.';
@@ -154,14 +169,21 @@
     } else if (selectedSCP === '0762') {
       multiplier = 1.2;
       message = 'SCP 076-2 CAN BECOME ACTIVE IN:';
-    } else {
-      multiplier = 0.3;
+    } else if (selectedSCP === 'riot') {
+      multiplier = 2.4;
       message = 'A RIOT CAN BE CAUSED IN:';
+    } else {
+      resultDiv.textContent = 'Unknown selection.';
+      return;
     }
 
-    const timeInHours = ((100 - percent) * multiplier) / 100;
+    const timeInHours = (100 - percent) * multiplier;
     const hours = Math.floor(timeInHours);
     const minutes = Math.round((timeInHours - hours) * 60);
+
+    // Clear input and buttons (clear screen except result)
+    document.getElementById('input-section').style.display = 'none';
+    document.querySelector('.buttons').style.display = 'none';
 
     resultDiv.textContent = `${message} ${hours}h ${minutes}m`;
   }
