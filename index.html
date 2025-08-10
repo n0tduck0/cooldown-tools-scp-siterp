@@ -135,15 +135,12 @@
 
   function selectSCP(scp) {
     selectedSCP = scp;
-
-    // Highlight the selected button, remove from others
     document.querySelectorAll('.spc-btn').forEach(btn => btn.classList.remove('active'));
     document.getElementById(`btn-${scp}`).classList.add('active');
-
-    // Show input and clear fields
     document.getElementById('input-section').style.display = 'block';
     document.getElementById('percentage').value = '';
     document.getElementById('result').textContent = '';
+    document.querySelector('.buttons').style.display = 'flex';
   }
 
   function calculateCooldown() {
@@ -170,18 +167,18 @@
       multiplier = 1.2;
       message = 'SCP 076-2 CAN BECOME ACTIVE IN:';
     } else if (selectedSCP === 'riot') {
-      multiplier = 2.4;
+      multiplier = 0.3;
       message = 'A RIOT CAN BE CAUSED IN:';
     } else {
       resultDiv.textContent = 'Unknown selection.';
       return;
     }
 
-    const timeInHours = (100 - percent) * multiplier;
-    const hours = Math.floor(timeInHours);
-    const minutes = Math.round((timeInHours - hours) * 60);
+    const totalMinutes = (100 - percent) * multiplier;
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = Math.round(totalMinutes % 60);
 
-    // Clear input and buttons (clear screen except result)
+    // Clear screen except result
     document.getElementById('input-section').style.display = 'none';
     document.querySelector('.buttons').style.display = 'none';
 
