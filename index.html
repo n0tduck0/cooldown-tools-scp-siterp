@@ -39,7 +39,6 @@
   }
   button.spc-btn {
     flex: 1;
-    background-color: #333;
     border: 2px solid #444;
     color: #ddd;
     font-size: 1rem;
@@ -50,14 +49,33 @@
     transition: all 0.3s ease;
     font-weight: 600;
     user-select: none;
+    background-color: #333;
   }
-  button.spc-btn:hover {
-    background-color: #ffcc00;
+  /* SCP 610 */
+  #btn-610:hover {
+    background-color: #ff4c4c; /* red */
+    color: #121212;
+    border-color: #ff4c4c;
+    box-shadow: 0 6px 12px rgba(255,76,76,0.6);
+    transform: translateY(-3px);
+  }
+  /* SCP 076-2 */
+  #btn-0762:hover {
+    background-color: #b19cd9; /* light purple */
+    color: #121212;
+    border-color: #b19cd9;
+    box-shadow: 0 6px 12px rgba(177,156,217,0.6);
+    transform: translateY(-3px);
+  }
+  /* Class-D Riot */
+  #btn-riot:hover {
+    background-color: #ffcc00; /* yellow */
     color: #121212;
     border-color: #ffcc00;
     box-shadow: 0 6px 12px rgba(255,204,0,0.6);
     transform: translateY(-3px);
   }
+  /* Active button style */
   button.spc-btn.active {
     background-color: #ffcc00;
     color: #121212;
